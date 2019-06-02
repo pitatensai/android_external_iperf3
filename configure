@@ -12736,6 +12736,7 @@ if test "x$with_openssl" = "xno"; then
 $as_echo "$as_me: WARNING: Building without OpenSSL; disabling iperf_auth functionality. " >&2;}
 else
     # Check for OPENSSL support
+    havs_ssl=false
 
     found=false
 
@@ -12923,6 +12924,7 @@ $as_echo "yes" >&6; }
 
 $as_echo "#define HAVE_SSL 1" >>confdefs.h
 
+          have_ssl=true
 
 else
 
@@ -12947,9 +12949,11 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 
-    LDFLAGS="$LDFLAGS $OPENSSL_LDFLAGS"
-    LIBS="$OPENSSL_LIBS $LIBS"
-    CPPFLAGS="$OPENSSL_INCLUDES $CPPFLAGS"
+    if $have_ssl; then
+        LDFLAGS="$LDFLAGS $OPENSSL_LDFLAGS"
+        LIBS="$OPENSSL_LIBS $LIBS"
+        CPPFLAGS="$OPENSSL_INCLUDES $CPPFLAGS"
+    fi
 fi
 
 # Check for TCP_CONGESTION sockopt (believed to be Linux and FreeBSD only)

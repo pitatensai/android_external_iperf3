@@ -9,10 +9,10 @@ third_party {
     type: GIT
     value: "https://github.com/esnet/iperf.git"
   }
-  version: "61b82c0b25052364bae99f83a583ab7c7f5f2d2d"
+  version: "2679640c0f6dfc28f0e243adb3bfdf8c41cbb027"
   last_upgrade_date {
     year: 2019
-    month: 5
+    month: 6
     day: 2
   }
 }

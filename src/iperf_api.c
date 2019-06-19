@@ -238,6 +238,12 @@ iperf_get_test_num_streams(struct iperf_test *ipt)
 }
 
 int
+iperf_get_test_repeating_payload(struct iperf_test *ipt)
+{
+    return ipt->repeating_payload;
+}
+
+int
 iperf_get_test_server_port(struct iperf_test *ipt)
 {
     return ipt->server_port;
@@ -326,6 +332,12 @@ char *
 iperf_get_iperf_version(void)
 {
     return (char*)iperf_version;
+}
+
+int
+iperf_get_test_no_delay(struct iperf_test *ipt)
+{
+    return ipt->no_delay;
 }
 
 /************** Setter routines for some fields inside iperf_test *************/
@@ -430,6 +442,12 @@ void
 iperf_set_test_num_streams(struct iperf_test *ipt, int num_streams)
 {
     ipt->num_streams = num_streams;
+}
+
+void
+iperf_set_test_repeating_payload(struct iperf_test *ipt, int repeating_payload)
+{
+    ipt->repeating_payload = repeating_payload;
 }
 
 static void
@@ -577,6 +595,12 @@ iperf_set_test_bidirectional(struct iperf_test* ipt, int bidirectional)
         ipt->mode = BIDIRECTIONAL;
     else
         iperf_set_test_reverse(ipt, ipt->reverse);
+}
+
+void
+iperf_set_test_no_delay(struct iperf_test* ipt, int no_delay)
+{
+    ipt->no_delay = no_delay;
 }
 
 /********************** Get/set test protocol structure ***********************/
@@ -1670,6 +1694,8 @@ send_parameters(struct iperf_test *test)
 	    cJSON_AddNumberToObject(j, "get_server_output", iperf_get_test_get_server_output(test));
 	if (test->udp_counters_64bit)
 	    cJSON_AddNumberToObject(j, "udp_counters_64bit", iperf_get_test_udp_counters_64bit(test));
+	if (test->repeating_payload)
+	    cJSON_AddNumberToObject(j, "repeating_payload", test->repeating_payload);
 #if defined(HAVE_SSL)
     if (test->settings->client_username && test->settings->client_password && test->settings->client_rsa_pubkey){
         encode_auth_setting(test->settings->client_username, test->settings->client_password, test->settings->client_rsa_pubkey, &test->settings->authtoken);
@@ -1763,6 +1789,8 @@ get_parameters(struct iperf_test *test)
 	    iperf_set_test_get_server_output(test, 1);
 	if ((j_p = cJSON_GetObjectItem(j, "udp_counters_64bit")) != NULL)
 	    iperf_set_test_udp_counters_64bit(test, 1);
+	if ((j_p = cJSON_GetObjectItem(j, "repeating_payload")) != NULL)
+	    test->repeating_payload = 1;
 #if defined(HAVE_SSL)
 	if ((j_p = cJSON_GetObjectItem(j, "authtoken")) != NULL)
         test->settings->authtoken = strdup(j_p->valuestring);
@@ -3325,7 +3353,7 @@ iperf_print_results(struct iperf_test *test)
             }
 
             /* Print server output if we're on the client and it was requested/provided */
-            if (test->role == 'c' && iperf_get_test_get_server_output(test)) {
+            if (test->role == 'c' && iperf_get_test_get_server_output(test) && !test->json_output) {
                 if (test->json_server_output) {
                     iperf_printf(test, "\nServer JSON output:\n%s\n", cJSON_Print(test->json_server_output));
                     cJSON_Delete(test->json_server_output);

@@ -27,6 +27,7 @@
 #ifndef        __IPERF_API_H
 #define        __IPERF_API_H
 
+#include <sys/socket.h>
 #include <sys/time.h>
 #include <setjmp.h>
 #include <stdio.h>
@@ -111,6 +112,7 @@ int	iperf_get_test_socket_bufsize( struct iperf_test* ipt );
 double	iperf_get_test_reporter_interval( struct iperf_test* ipt );
 double	iperf_get_test_stats_interval( struct iperf_test* ipt );
 int	iperf_get_test_num_streams( struct iperf_test* ipt );
+int	iperf_get_test_repeating_payload( struct iperf_test* ipt );
 int	iperf_get_test_server_port( struct iperf_test* ipt );
 char*	iperf_get_test_server_hostname( struct iperf_test* ipt );
 char*	iperf_get_test_template( struct iperf_test* ipt );
@@ -125,6 +127,7 @@ int	iperf_get_test_one_off( struct iperf_test* ipt );
 int iperf_get_test_tos( struct iperf_test* ipt );
 char*	iperf_get_extra_data( struct iperf_test* ipt );
 char*	iperf_get_iperf_version(void);
+int	iperf_get_test_no_delay( struct iperf_test* ipt );
 
 /* Setter routines for some fields inside iperf_test. */
 void	iperf_set_verbose( struct iperf_test* ipt, int verbose );
@@ -143,6 +146,7 @@ void	iperf_set_test_burst( struct iperf_test* ipt, int burst );
 void	iperf_set_test_server_port( struct iperf_test* ipt, int server_port );
 void	iperf_set_test_socket_bufsize( struct iperf_test* ipt, int socket_bufsize );
 void	iperf_set_test_num_streams( struct iperf_test* ipt, int num_streams );
+void	iperf_set_test_repeating_payload( struct iperf_test* ipt, int repeating_payload );
 void	iperf_set_test_role( struct iperf_test* ipt, char role );
 void	iperf_set_test_server_hostname( struct iperf_test* ipt, char* server_hostname );
 void    iperf_set_test_template( struct iperf_test *ipt, char *tmp_template );
@@ -157,6 +161,7 @@ void	iperf_set_test_one_off( struct iperf_test* ipt, int one_off );
 void    iperf_set_test_tos( struct iperf_test* ipt, int tos );
 void	iperf_set_extra_data( struct iperf_test* ipt, char *dat);
 void    iperf_set_test_bidirectional( struct iperf_test* ipt, int bidirectional);
+void    iperf_set_test_no_delay( struct iperf_test* ipt, int no_delay);
 
 #if defined(HAVE_SSL)
 void    iperf_set_test_client_username(struct iperf_test *ipt, char *client_username);
